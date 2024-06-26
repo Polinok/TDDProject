@@ -19,13 +19,15 @@ elseif(WIN32)
 endif()
 
 if(UNITTEST)
-        add_subdirectory(googletests/)
+        add_subdirectory(googletests/) # чтобы писать тесты на программы
 endif()
 
 
 add_subdirectory(TestTask/libs/printer)
 
-add_subdirectory(TestTask/libs/exampleProject)
+add_subdirectory(TestTask/libs/exampleProject) # для создания десктопного приложения с оконным интерфейсом
+
+add_subdirectory(TestTask/libs/animal)
 
 if(UNITTEST)
         message(" output lib dir " ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG})
