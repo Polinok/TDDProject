@@ -31,6 +31,10 @@ add_subdirectory(TestTask/libs/animal)
 
 add_subdirectory(TestTask/libs/cat)
 
+add_subdirectory(TestTask/libs/math_0110)
+
+add_subdirectory(TestTask/libs/complex_0110)
+
 if(UNITTEST)
         message(" output lib dir " ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG})
         enable_testing()
