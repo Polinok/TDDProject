@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project (complex_0110)
+project (Complex)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 

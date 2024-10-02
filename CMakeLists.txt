@@ -31,9 +31,9 @@ add_subdirectory(TestTask/libs/animal)
 
 add_subdirectory(TestTask/libs/cat)
 
-add_subdirectory(TestTask/libs/math_0110)
+add_subdirectory(TestTask/libs/math)
 
-add_subdirectory(TestTask/libs/complex_0110)
+add_subdirectory(TestTask/libs/complex)
 
 if(UNITTEST)
         message(" output lib dir " ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG})
@@ -45,7 +45,7 @@ add_executable(tddProject main.cpp)
 
 target_link_libraries(${PROJECT_NAME} Printer)
 
-target_link_libraries(${PROJECT_NAME} Complex_0110) # нужно ли?
+target_link_libraries(${PROJECT_NAME} Complex) # нужно ли?
 
 if(UNIX)
         add_custom_target( distclean COMMAND find . -name *_automoc.cpp -type f -delete

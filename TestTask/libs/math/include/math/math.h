@@ -1,17 +1,17 @@
-#ifndef MATH_0110_H
-#define MATH_0110_H
+#ifndef MATH_H
+#define MATH_H
 
 
 
-    class Math_0110 {
+    class Math {
 	public:
 		/**
          * @brief Math_0110 конструктор по умолчанию
 		 */
-        Math_0110();
+        Math();
 
 
-        ~Math_0110();
+        ~Math() = default; // деструктор
 
 	};
 
