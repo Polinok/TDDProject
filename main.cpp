@@ -36,16 +36,31 @@ int main()
     std::cout << "  |complex number| = " << T3.abs() << std::endl<< std::endl;
 
     Complex T4 = add(T2, T3);
-
     T4.view();
 
     Complex T5 = dif(T3, T2);
-
     T5.view();
 
     Complex T6 = conj(T3);
-
     T6.view();
+
+    Complex T7(-3, 7);
+
+    Complex T8;
+    T8 = T3 + T7;
+    T8.view();
+
+    Complex T9;
+    T9 = T3 - T7;
+    T9.view();
+
+    Complex T10;
+    T10 = T3 * T7;
+    T10.view();
+
+    Complex T11;
+    T11 = Complex(2,-4) / Complex(-1,2);
+    T11.view();
 
 	return 0;
 }

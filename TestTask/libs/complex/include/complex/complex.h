@@ -29,7 +29,6 @@
 
         double abs(); // модуль комплексного числа
 
-
         ~Complex() = default; // деструктор
 /*
     private:
@@ -44,5 +43,13 @@
     Complex dif(Complex & c1, Complex & c2); // разность комплексных чисел c1 и c2
 
     Complex conj(Complex & c1); // комплексное сопряжение c1
+
+    Complex operator+(const Complex& c1, const Complex& c2); // переопределение оператора "+"
+
+    Complex operator-(const Complex& c1, const Complex& c2); // переопределение оператора "-"
+
+    Complex operator*(const Complex& c1, const Complex& c2); // переопределение оператора "*"
+
+    Complex operator/(const Complex& c1, const Complex& c2); // переопределение оператора "/"
 
 #endif

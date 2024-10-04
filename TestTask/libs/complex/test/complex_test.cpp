@@ -73,3 +73,67 @@ TEST(Complex_Tests, CheckConjIm) {
 
     ASSERT_EQ(T2.Im, 4);
 }
+
+TEST(Complex_Tests, CheckOperatorPlusRe) {
+    Complex T1(3, -4);
+    Complex T2(-5, 6);
+    Complex T3 = T1 + T2;
+
+    ASSERT_EQ(T3.Re, -2);
+}
+
+TEST(Complex_Tests, CheckOperatorPlusIm) {
+    Complex T1(3, -4);
+    Complex T2(-5, 6);
+    Complex T3 = T1 + T2;
+
+    ASSERT_EQ(T3.Im, 2);
+}
+
+TEST(Complex_Tests, CheckOperatorMinusRe) {
+    Complex T1(3, -4);
+    Complex T2(-5, 6);
+    Complex T3 = T1 - T2;
+
+    ASSERT_EQ(T3.Re, 8);
+}
+
+TEST(Complex_Tests, CheckOperatorMinusIm) {
+    Complex T1(3, -4);
+    Complex T2(-5, 6);
+    Complex T3 = T1 - T2;
+
+    ASSERT_EQ(T3.Im, -10);
+}
+
+TEST(Complex_Tests, CheckOperatorProdRe) {
+    Complex T1(3, 1);
+    Complex T2(2, -3);
+    Complex T3 = T1 * T2;
+
+    ASSERT_EQ(T3.Re, 9);
+}
+
+TEST(Complex_Tests, CheckOperatorProdIm) {
+    Complex T1(3, 1);
+    Complex T2(2, -3);
+    Complex T3 = T1 * T2;
+
+    ASSERT_EQ(T3.Im, -7);
+}
+
+TEST(Complex_Tests, CheckOperatorDivRe) {
+    Complex T1(-1, -3);
+    Complex T2(1, -2);
+    Complex T3 = T1 / T2;
+
+    ASSERT_EQ(T3.Re, 1);
+}
+
+TEST(Complex_Tests, CheckOperatorDivIm) {
+    Complex T1(-1, -3);
+    Complex T2(1, -2);
+    Complex T3 = T1 / T2;
+
+    ASSERT_EQ(T3.Im, -1);
+}
