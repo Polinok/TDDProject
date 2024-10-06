@@ -24,43 +24,38 @@ int main()
     std::cerr << "Printerov sozdano: " << Printing::Printer::getCountCreatedPrinters() << std::endl;
 */
     Complex T1;
-    T1.view();
-    std::cout << "  |complex number| = " << T1.abs() << std::endl << std::endl;
+    std::cout << "  T1 = " << T1;
+    std::cout << "  |T1| = " << T1.abs() << std::endl << std::endl;
 
     Complex T2(6);
-    T2.view();
-    std::cout << "  |complex number| = " << T2.abs() << std::endl<< std::endl;
+    std::cout << "  T2 = " << T2;
+    std::cout << "  |T2| = " << T2.abs() << std::endl<< std::endl;
 
     Complex T3(2, -6);
-    T3.view();
-    std::cout << "  |complex number| = " << T3.abs() << std::endl<< std::endl;
+    std::cout << "  T3 = " << T3;
+    std::cout << "  |T3| = " << T3.abs() << std::endl<< std::endl;
 
-    Complex T4 = add(T2, T3);
-    T4.view();
+    Complex T4 = conj(T3);
+    std::cout << "  T4 = T3* = " << T4;
 
-    Complex T5 = dif(T3, T2);
-    T5.view();
+    Complex T5(-3, 7);
+    std::cout << "  T5 = " << T5;
 
-    Complex T6 = conj(T3);
-    T6.view();
+    Complex T6;
+    T6 = T3 + T5;
+    std::cout << "  T6 = T3 + T5 = " << T6;
 
-    Complex T7(-3, 7);
+    Complex T7;
+    T7 = T3 - T5;
+    std::cout << "  T7 = T3 - T5 = " << T7;
 
     Complex T8;
-    T8 = T3 + T7;
-    T8.view();
+    T8 = T3 * T5;
+    std::cout << "  T8 = T3 * T5 = " << T8;
 
     Complex T9;
-    T9 = T3 - T7;
-    T9.view();
-
-    Complex T10;
-    T10 = T3 * T7;
-    T10.view();
-
-    Complex T11;
-    T11 = Complex(2,-4) / Complex(-1,2);
-    T11.view();
+    T9 = Complex(2,-4) / Complex(-1,2);
+    std::cout << "  T9 = Complex(2,-4) / Complex(-1,2) = " << T9;
 
 	return 0;
 }
