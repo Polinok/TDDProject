@@ -2,30 +2,36 @@
 #define COMPLEX_H
 
 #include <iostream>
+#include <math.h>
 
+    template <typename T>
     class Complex {
 
     public:
 
-        double Re;
-        double Im;
+        T Re;
+        T Im;
 
         Complex() {  // конструктор 1
             Re = 0;
             Im = 0;
         };
 
-        Complex(double in_Re) {  // конструктор 2
+        Complex(T in_Re) {  // конструктор 2
             Re = in_Re;
             Im = 0;
         };
 
-        Complex(double in_Re, double in_Im) {  // конструктор 3
+        Complex(T in_Re, T in_Im) {  // конструктор 3
             Re = in_Re;
             Im = in_Im;
         };
 
-        double abs(); // модуль комплексного числа
+        // double abs(); // модуль комплексного числа
+        double abs()
+        {
+            return sqrt(Re * Re + Im * Im);
+        }
 
         ~Complex() = default; // деструктор
 /*
@@ -36,18 +42,79 @@
 */
         };
 
-    std::ostream& operator<<(std::ostream & os, Complex  const& c); // переопределение оператора вывода
+    // переопределение оператора вывода
+    template <typename T>
+    std::ostream& operator<<(std::ostream & os, Complex<T>  const& c)
+    {
+        os << c.Re << ((c.Im >= 0) ? (" + ") : (" - ")) << ((c.Im >= 0) ? (c.Im) : (-c.Im)) << "i \n";
+        return os;
+    }
 
-    Complex conj(Complex & c1); // комплексное сопряжение c1
+    // комплексное сопряжение c1
+    template <typename T>
+    Complex<T> conj(Complex<T> & c1)
+    {
+       Complex<T> res;
+       res.Re = c1.Re;
+       res.Im = -c1.Im;
+       return res;
+    }
 
-    Complex operator+(const Complex& c1, const Complex& c2); // переопределение оператора "+"
+    // переопределение оператора "+"
+    template <typename T>
+    Complex<T> operator+(const Complex<T>& c1, const Complex<T>& c2){
+                Complex<T> res;
+                res.Re = c1.Re + c2.Re;
+                res.Im = c1.Im + c2.Im;
+                return res;
+    }
 
-    Complex operator-(const Complex& c1, const Complex& c2); // переопределение оператора "-"
+    // переопределение оператора "-"
+    template <typename T>
+    Complex<T> operator-(const Complex<T>& c1, const Complex<T>& c2){
+                Complex<T> res;
+                res.Re = c1.Re - c2.Re;
+                res.Im = c1.Im - c2.Im;
+                return res;
+    }
 
-    Complex operator*(const Complex& c1, const Complex& c2); // переопределение оператора "*"
+    // переопределение оператора "*"
+    template <typename T>
+    Complex<T> operator*(const Complex<T>& c1, const Complex<T>& c2){
+                Complex<T> res;
+                res.Re = (c1.Re * c2.Re) - (c1.Im * c2.Im);
+                res.Im = (c1.Re * c2.Im) + (c1.Im * c2.Re);
+                return res;
+    }
 
-    Complex operator/(const Complex& c1, const Complex& c2); // переопределение оператора "/"
+    // переопределение оператора "/"
+    template <typename T>
+    Complex<T> operator/(const Complex<T>& c1, const Complex<T>& c2){
+                Complex<T> res;
+                res.Re = ((c1.Re * c2.Re) + (c1.Im * c2.Im)) / (c2.Re * c2.Re + c2.Im * c2.Im);
+                res.Im = ((c1.Im * c2.Re) - (c1.Re * c2.Im)) / (c2.Re * c2.Re + c2.Im * c2.Im);
+                return res;
+    }
 
+    /*
+    template <typename T>
+    std::ostream& operator<<(std::ostream & os, Complex<T>  const& c); // переопределение оператора вывода
+
+    template <typename T>
+    Complex<T> conj(Complex<T> & c1); // комплексное сопряжение c1
+
+    template <typename T>
+    Complex<T> operator+(const Complex<T>& c1, const Complex<T>& c2); // переопределение оператора "+"
+
+    template <typename T>
+    Complex<T> operator-(const Complex<T>& c1, const Complex<T>& c2); // переопределение оператора "-"
+
+    template <typename T>
+    Complex<T> operator*(const Complex<T>& c1, const Complex<T>& c2); // переопределение оператора "*"
+
+    template <typename T>
+    Complex<T> operator/(const Complex<T>& c1, const Complex<T>& c2); // переопределение оператора "/"
+*/
     // Complex add(Complex & c1, Complex & c2); // сумма комплексных чисел c1 и c2
 
     // Complex dif(Complex & c1, Complex & c2); // разность комплексных чисел c1 и c2
