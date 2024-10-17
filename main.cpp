@@ -1,9 +1,16 @@
 #include "printer/printer.h"
 #include "complex/complex.h"
-//#include "..\TDDProject\TestTask\libs\complex\include\complex\complex.h"
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <iterator>
+#include <algorithm>
 #include <math.h>
+#include <cstdio>
+#include <stdio.h>
 
+#include <cstdlib>
+using namespace std;
 int main()
 {
 
@@ -56,6 +63,30 @@ int main()
     Complex<double> T9;
     T9 = Complex<double>(2,-4) / Complex<double>(-1,2);
     std::cout << "  T9 = Complex(2,-4) / Complex(-1,2) = " << T9;
+
+
+    std::ifstream file;
+    file.open("C:\\Users\\ROG\\Documents\\TESTS\\TDDProject\\am_sound.dat", std::ios::binary);
+    if (file.is_open())
+        std::cout << "\n  File is opened\n" << std::endl;
+    else
+    {
+        std::cout << "\n  Error: file isn't opened\n" << std::endl;
+        return -1;
+    }
+
+    int weight = 0;
+    file.seekg (0, std::ios::end); // становимся в конец файла || std::ios::end или std::ios_base::end
+    weight = file.tellg(); // считываем текущую позицию
+    file.seekg(0, std::ios::beg); // возвращаемся в начало
+    std::cout << "  File size = " << weight << " B" << std::endl;
+    size_t size = weight / sizeof(int); // (количество элементов) = (общий вес) / (вес одного элемента типа int)
+    std::cout << "  File contains " << size << " elements" << std::endl;
+
+    std::vector<int> data3(size);
+    file.read((char*) &data3[0], weight);
+    std::cout << data3[1000] << std::endl;
+    file.close();
 
 	return 0;
 }
