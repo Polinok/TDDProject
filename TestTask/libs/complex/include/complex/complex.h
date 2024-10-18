@@ -30,7 +30,7 @@
         // double abs(); // модуль комплексного числа
         double abs()
         {
-            return sqrt(Re * Re + Im * Im);
+            return sqrt((double)Re * (double)Re + (double)Im * (double)Im);
         }
 
         ~Complex() = default; // деструктор

@@ -38,7 +38,7 @@ int main()
     std::cout << "  T2 = " << T2;
     std::cout << "  |T2| = " << T2.abs() << std::endl<< std::endl;
 
-    Complex<double> T3(2, -6);
+    Complex<double> T3(253146, -199327);
     std::cout << "  T3 = " << T3;
     std::cout << "  |T3| = " << T3.abs() << std::endl<< std::endl;
 
@@ -79,13 +79,19 @@ int main()
     file.seekg (0, std::ios::end); // становимся в конец файла || std::ios::end или std::ios_base::end
     weight = file.tellg(); // считываем текущую позицию
     file.seekg(0, std::ios::beg); // возвращаемся в начало
-    std::cout << "  File size = " << weight << " B" << std::endl;
-    size_t size = weight / sizeof(int); // (количество элементов) = (общий вес) / (вес одного элемента типа int)
-    std::cout << "  File contains " << size << " elements" << std::endl;
+    std::cout << "  File size = " << weight << " B" << std::endl << std::endl;
+    int size = weight / sizeof(int); // (количество элементов) = (общий вес) / (вес одного элемента типа int)
+    std::cout << "  File contains " << size << " elements" << std::endl << std::endl;
 
-    std::vector<int> data3(size);
-    file.read((char*) &data3[0], weight);
-    std::cout << data3[1000] << std::endl;
+    std::vector<Complex<int>> signalAM(size);
+    file.read((char*) &signalAM[0], weight);
+    std::cout << "  X = " << signalAM[1000] << std::endl;
+    std::vector<double> demodAM(size);
+    for (int i = 0; i < size; i++) {
+        demodAM[i] = signalAM[i].abs();
+    }
+    std::cout << " |X| = " << demodAM[1000] << std::endl;
+
     file.close();
 
 	return 0;
