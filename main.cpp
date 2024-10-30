@@ -100,26 +100,36 @@ int main()
     int size = weight / sizeof(int); // (количество элементов) = (общий вес) / (вес одного элемента типа int)
     std::cout << "  File contains " << size << " elements" << std::endl << std::endl;
 
-    std::vector<Complex<int>> signalAM(size);
-    infile.read((char*) &signalAM[0], weight);
-    std::cout << "  X = " << signalAM[1000] << std::endl;
-    std::vector<double> demodAM(size);
-    for (int i = 0; i < size; i++) {
-        demodAM[i] = signalAM[i].abs();
-    }
-    std::cout << " |X| = " << demodAM[1000] << std::endl;
+    std::vector<Complex<int>> signalAM(size/2);
+    infile.read((char*) &signalAM[0], size/2*sizeof(int));
+    std::cout << "  X = " << signalAM[409599] << std::endl;
 
+    std::vector<double> demodAM(size/2);
+    double maxVal = 0;
+    for (int i = 0; i < size/2; i++) {
+        demodAM[i] = signalAM[i].abs();
+        if (abs(demodAM[i]) > maxVal) maxVal = abs(demodAM[i]);
+    }
+
+    for (int i = 0; i < size/2; i++) {
+        demodAM[i] /= maxVal; // Нормализация
+    }
+    std::cout << " |X| = " << demodAM[40999] << std::endl;
     infile.close();
 
-    std::ofstream outfile("output.wav", std::ios::binary);
+    //std::ofstream outfile("output.wav", std::ios::binary);
+    ofstream outfile;
+    outfile.open("test2.wav", std::ios::binary);
     WavHead head={{'R','I','F','F'},0,{'W','A','V','E'},{'f','m','t',' '},16,
                 1,1,11025,11025 * sizeof(double),sizeof(double),8,{'d','a','t','a'},
                 0};
 
-    head.size2 = size * sizeof(double);
+    head.size2 = demodAM.size() * sizeof(double); // 3276800
+    std::cout << head.size2<< std::endl;
     head.size0 = 36 + head.size2;
-    outfile.write((char*) &head, sizeof(head));
-    outfile.write((char*) &demodAM, sizeof(demodAM));
+    outfile.write((char*) &head, sizeof(head)); // 44
+    outfile.write((char*) (demodAM.data()), head.size2);
+    outfile.close();
 
 	return 0;
 }
