@@ -105,30 +105,31 @@ int main()
     std::cout << "  X = " << signalAM[409599] << std::endl;
 
     std::vector<double> demodAM(size/2);
-    double maxVal = 0;
     for (int i = 0; i < size/2; i++) {
         demodAM[i] = signalAM[i].abs();
-        if (abs(demodAM[i]) > maxVal) maxVal = abs(demodAM[i]);
     }
 
+    double maxVal = *max_element(demodAM.begin(), demodAM.end());
+
+    // Нормализуем данные и конвертируем в int16_t
+    std::vector<int16_t> demodAM_int16(size/2);
     for (int i = 0; i < size/2; i++) {
-        demodAM[i] /= maxVal; // Нормализация
+        demodAM_int16[i] = static_cast<int16_t>((demodAM[i] / maxVal) * 32767);
     }
+
     std::cout << " |X| = " << demodAM[40999] << std::endl;
     infile.close();
 
-    //std::ofstream outfile("output.wav", std::ios::binary);
-    ofstream outfile;
-    outfile.open("test2.wav", std::ios::binary);
+    std::ofstream outfile("output.wav", std::ios::binary);
     WavHead head={{'R','I','F','F'},0,{'W','A','V','E'},{'f','m','t',' '},16,
-                1,1,11025,11025 * sizeof(double),sizeof(double),8,{'d','a','t','a'},
+                1,1,11025,11025 * sizeof(int16_t),sizeof(int16_t),16,{'d','a','t','a'},
                 0};
 
-    head.size2 = demodAM.size() * sizeof(double); // 3276800
+    head.size2 = demodAM_int16.size() * sizeof(int16_t); // 3276800
     std::cout << head.size2<< std::endl;
     head.size0 = 36 + head.size2;
     outfile.write((char*) &head, sizeof(head)); // 44
-    outfile.write((char*) (demodAM.data()), head.size2);
+    outfile.write((char*) (demodAM_int16.data()), head.size2);
     outfile.close();
 
 	return 0;
