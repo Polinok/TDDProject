@@ -140,5 +140,38 @@ int main()
                 0};
     Helpers::signalWriter(demodFM_int16, headFM, filenameDemodFM);
 
+
+
+
+    // ДЛЯ ТЕСТА signalWriter И complexSignalReader
+    std::vector<Complex<int16_t>> signalc(10);
+    std::vector<int16_t> signal(20);
+    int k = 0;
+    for (int i = 0;  i < 10; i++) {
+        signalc[i] = static_cast<int16_t>(i);
+        std::cout << signalc[i] << std::endl;
+
+        signal[k] = static_cast<int16_t>(signalc[i].Re);
+        signal[k+1] = static_cast<int16_t>(signalc[i].Im);
+
+        std::cout << signal[k] << " and " << signal[k+1] << std::endl << std::endl;
+        k += 2;
+    }
+
+    WavHead head={{'R','I','F','F'},0,{'W','A','V','E'},{'f','m','t',' '},16,
+                1,1,11025,11025 * sizeof(int16_t),sizeof(int16_t),16,{'d','a','t','a'},
+                0};
+    std::string filename = "signaldemod.wav";
+    Helpers::signalWriter(signal, head, filename);
+
+    std::vector<Complex<int16_t>> signalnew = Helpers::complexSignalReader<int16_t>(filename);
+    int sizenew = signalnew.size();
+    std::cout << signalnew.size() << std::endl;
+
+    for (int i = 0;  i < sizenew; i++) {
+        std::cout << signalnew[i] << std::endl;
+    }
+
+
 	return 0;
 }
