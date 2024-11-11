@@ -1,5 +1,7 @@
 #include "printer/printer.h"
 #include "complex/complex.h"
+#include "filesignal/filesignal.h"
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -11,21 +13,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-struct WavHead{
- char RIFF[4];    //The RIFF in the first part
- long int size0;//Save the size of all files behind
- char WAVE[4];
- char FMT[4];
- long int size1;//Stored is the size saved by fmt, after including this, the first few data, a total of 16
- short int fmttag;
- short int channel;
- long int samplespersec;//The number of samples per second, using 11025
- long int bytepersec;
- short int blockalign;
- short int bitpersamples;
- char DATA[4];
- long int size2;//The remaining file size, that is, the size of the sound sample, because it is one second of content, then it is 11025.
-};
+
 
 using namespace std;
 int main()
@@ -82,55 +70,75 @@ int main()
     std::cout << "  T9 = Complex(2,-4) / Complex(-1,2) = " << T9;
 
 
-    std::ifstream infile;
-    infile.open("C:\\Users\\ROG\\Documents\\TESTS\\TDDProject\\am_sound.dat", std::ios::binary);
-    if (infile.is_open())
-        std::cout << "\n  File is opened\n" << std::endl;
-    else
-    {
-        std::cout << "\n  Error: file isn't opened\n" << std::endl;
-        return -1;
-    }
 
-    int weight = 0;
-    infile.seekg (0, std::ios::end); // становимся в конец файла || std::ios::end или std::ios_base::end
-    weight = infile.tellg(); // считываем текущую позицию
-    infile.seekg(0, std::ios::beg); // возвращаемся в начало
-    std::cout << "  File size = " << weight << " B" << std::endl << std::endl;
-    int size = weight / sizeof(int); // (количество элементов) = (общий вес) / (вес одного элемента типа int)
-    std::cout << "  File contains " << size << " elements" << std::endl << std::endl;
+    // AM
 
-    std::vector<Complex<int>> signalAM(size/2);
-    infile.read((char*) &signalAM[0], size/2*sizeof(int));
+    // Чтение сигнала из файла
+    std::string filenameAM = "C:\\Users\\ROG\\Documents\\TESTS\\TDDProject\\am_sound.dat";
+    std::vector<Complex<int>> signalAM = Helpers::complexSignalReader<int>(filenameAM);
+
+    int sizeAM = signalAM.size();
     std::cout << "  X = " << signalAM[409599] << std::endl;
 
-    std::vector<double> demodAM(size/2);
-    for (int i = 0; i < size/2; i++) {
+    std::vector<double> demodAM(sizeAM);
+    for (int i = 0; i < sizeAM; i++) {
         demodAM[i] = signalAM[i].abs();
     }
 
     double maxVal = *max_element(demodAM.begin(), demodAM.end());
 
     // Нормализуем данные и конвертируем в int16_t
-    std::vector<int16_t> demodAM_int16(size/2);
-    for (int i = 0; i < size/2; i++) {
+    std::vector<int16_t> demodAM_int16(sizeAM);
+    for (int i = 0; i < sizeAM; i++) {
         demodAM_int16[i] = static_cast<int16_t>((demodAM[i] / maxVal) * 32767);
     }
 
     std::cout << " |X| = " << demodAM[40999] << std::endl;
-    infile.close();
 
-    std::ofstream outfile("output.wav", std::ios::binary);
-    WavHead head={{'R','I','F','F'},0,{'W','A','V','E'},{'f','m','t',' '},16,
-                1,1,11025,11025 * sizeof(int16_t),sizeof(int16_t),16,{'d','a','t','a'},
+
+    // Запись демодулированного сигнала в файл
+    std::string filenameDemodAM = "AMdemod.wav"; // Имя выходного файла
+    WavHead headAM={{'R','I','F','F'},0,{'W','A','V','E'},{'f','m','t',' '},16,
+                    1,1,11025,11025 * sizeof(int16_t),sizeof(int16_t),16,{'d','a','t','a'},
+                    0};
+    Helpers::signalWriter(demodAM_int16, headAM, filenameDemodAM);
+
+
+
+    // FM
+
+    // Чтение сигнала из файла
+    std::string filenameFM = "C:\\Users\\ROG\\Documents\\TESTS\\TDDProject\\file1EuropaPlus.bin";
+    std::vector<Complex<int>> signalFM = Helpers::complexSignalReader<int>(filenameFM);
+
+    int sizeFM = signalFM.size();
+
+    std::cout << "  X = " << signalFM[409599] << std::endl;
+    std::cout << "  XRE = " << signalFM[409599].Re << std::endl;
+    std::cout << "  XIM = " << signalFM[409599].Im << std::endl;
+
+    std::vector<double> demodFM(sizeFM);
+    demodFM[0] = ((double)signalFM[0].Im * (double)signalFM[0].Re - (double)signalFM[0].Re * (double)signalFM[0].Im) / ((double)signalFM[0].Re * (double)signalFM[0].Re + (double)signalFM[0].Im * (double)signalFM[0].Im);
+    for (int i = 1; i < sizeFM; i++) {
+        demodFM[i] = (((double)signalFM[i].Im - (double)signalFM[i-1].Im) * (double)signalFM[i].Re - ((double)signalFM[i].Re - (double)signalFM[i-1].Re) * (double)signalFM[i].Im) / ((double)signalFM[i].Re * (double)signalFM[i].Re + (double)signalFM[i].Im * (double)signalFM[i].Im);
+    }
+    std::cout << "  Xdemod = " << demodFM[409599] << std::endl;
+
+    double maxValFM = *max_element(demodFM.begin(), demodFM.end());
+
+    // Нормализуем данные и конвертируем в int16_t
+    std::vector<int16_t> demodFM_int16(sizeFM);
+    for (int i = 0; i < sizeFM; i++) {
+        demodFM_int16[i] = static_cast<int16_t>((demodFM[i] / maxValFM) * 32767);
+    }
+
+
+    // Запись демодулированного сигнала в файл
+    std::string filenameDemodFM = "FMdemod.wav"; // Имя выходного файла
+    WavHead headFM={{'R','I','F','F'},0,{'W','A','V','E'},{'f','m','t',' '},16,
+                1,2,205000,205000 * sizeof(int16_t),sizeof(int16_t),16,{'d','a','t','a'},
                 0};
-
-    head.size2 = demodAM_int16.size() * sizeof(int16_t); // 3276800
-    std::cout << head.size2<< std::endl;
-    head.size0 = 36 + head.size2;
-    outfile.write((char*) &head, sizeof(head)); // 44
-    outfile.write((char*) (demodAM_int16.data()), head.size2);
-    outfile.close();
+    Helpers::signalWriter(demodFM_int16, headFM, filenameDemodFM);
 
 	return 0;
 }
