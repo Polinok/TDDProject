@@ -28,6 +28,19 @@ TEST(Complex_Tests, CheckAbsReIm) {
     ASSERT_EQ(T.abs(), 5);
 }
 
+TEST(Complex_Tests, CheckEq) {
+    Complex<double> T1(253146, -199327);
+    Complex<double> T2(253146, -199327);
+    Complex<double> T3(253141, -199327);
+    Complex<double> T4(253146, 199327);
+    Complex<double> T5(253145, -199326);
+
+    ASSERT_EQ(T1==T2, 1);
+    ASSERT_EQ(T1==T3, 0);
+    ASSERT_EQ(T1==T4, 0);
+    ASSERT_EQ(T1==T5, 0);
+}
+
 TEST(Complex_Tests, CheckConjRe) {
     Complex<double> T1(3, -4);
     Complex<double> T2 = conj(T1);

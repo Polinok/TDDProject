@@ -44,16 +44,20 @@ std::vector<Complex<T>> complexSignalReader(const std::string& filename)
         exit(-1);
     }
 
+    WavHead head;
+
     int weight = 0;
     infile.seekg (0, std::ios::end); // становимся в конец файла || std::ios::end или std::ios_base::end
     weight = infile.tellg(); // считываем текущую позицию
     infile.seekg(0, std::ios::beg); // возвращаемся в начало
     std::cout << "  File size = " << weight << " B" << std::endl << std::endl;
-    int size = weight / sizeof(T); // (количество элементов) = (общий вес) / (вес одного элемента типа int)
+    int size = (weight-sizeof(head)) / sizeof(T); // (количество элементов) = (общий вес) / (вес одного элемента типа int)
     std::cout << "  File contains " << size << " elements" << std::endl << std::endl;
 
+    infile.read(reinterpret_cast<char*>(&head), sizeof(head));
+
     std::vector<Complex<T>> signal(size/2);
-    infile.read((char*) &signal[0], size/2*sizeof(T));
+    infile.read((char*) signal.data(), size*sizeof(T));
     infile.close();
     return signal;
 }

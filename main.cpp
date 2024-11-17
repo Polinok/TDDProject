@@ -34,7 +34,7 @@ int main()
     delete ptrToprinter;
 
     std::cerr << "Printerov sozdano: " << Printing::Printer::getCountCreatedPrinters() << std::endl;
-*/
+
     Complex<double> T1;
     std::cout << "  T1 = " << T1;
     std::cout << "  |T1| = " << T1.abs() << std::endl << std::endl;
@@ -69,7 +69,7 @@ int main()
     T9 = Complex<double>(2,-4) / Complex<double>(-1,2);
     std::cout << "  T9 = Complex(2,-4) / Complex(-1,2) = " << T9;
 
-
+*/
 
     // AM
 
@@ -109,7 +109,7 @@ int main()
 
     // Чтение сигнала из файла
     std::string filenameFM = "C:\\Users\\ROG\\Documents\\TESTS\\TDDProject\\file1EuropaPlus.bin";
-    std::vector<Complex<int>> signalFM = Helpers::complexSignalReader<int>(filenameFM);
+    std::vector<Complex<int32_t>> signalFM = Helpers::complexSignalReader<int>(filenameFM);
 
     int sizeFM = signalFM.size();
 
@@ -138,12 +138,16 @@ int main()
     WavHead headFM={{'R','I','F','F'},0,{'W','A','V','E'},{'f','m','t',' '},16,
                 1,2,205000,205000 * sizeof(int16_t),sizeof(int16_t),16,{'d','a','t','a'},
                 0};
+
     Helpers::signalWriter(demodFM_int16, headFM, filenameDemodFM);
 
 
 
 
     // ДЛЯ ТЕСТА signalWriter И complexSignalReader
+
+    std::cout << "\n\nIO TEST\n" << std::endl;
+
     std::vector<Complex<int16_t>> signalc(10);
     std::vector<int16_t> signal(20);
     int k = 0;
@@ -158,6 +162,8 @@ int main()
         k += 2;
     }
 
+    std::cout << "size(signalW) = " << signal.size() << std::endl << std::endl;
+
     WavHead head={{'R','I','F','F'},0,{'W','A','V','E'},{'f','m','t',' '},16,
                 1,1,11025,11025 * sizeof(int16_t),sizeof(int16_t),16,{'d','a','t','a'},
                 0};
@@ -165,12 +171,38 @@ int main()
     Helpers::signalWriter(signal, head, filename);
 
     std::vector<Complex<int16_t>> signalnew = Helpers::complexSignalReader<int16_t>(filename);
-    int sizenew = signalnew.size();
-    std::cout << signalnew.size() << std::endl;
-
-    for (int i = 0;  i < sizenew; i++) {
+    std::cout << "\nRead data:\n";
+    for (size_t i = 0;  i < signalnew.size(); i++) {
         std::cout << signalnew[i] << std::endl;
     }
+
+
+
+
+    /*
+    auto signalnew = Helpers::complexSignalReader<int16_t>(filename);
+    std::cout << "\nRead data:\n";
+        for (const auto& c : signalnew) {
+            std::cout << c << '\n';
+        }
+
+    std::vector<Complex<uint8_t>> signalnew = Helpers::complexSignalReader<uint8_t>(filename);
+
+
+    auto byte=reinterpret_cast<uint8_t*>(signalnew.data());
+
+    auto data=reinterpret_cast<Complex<int16_t>*>(byte+44);
+
+
+    for(size_t i=0;i!=10;i++){
+        std::cout<<data[i];
+    }*/
+//    int sizenew = signalnew.size();
+//    std::cout << "size(signalR) = " << signalnew.size() << std::endl;
+
+//    for (int i = 0;  i < sizenew; i++) {
+//        std::cout << signalnew[i] << std::endl;
+//    }
 
 
 	return 0;

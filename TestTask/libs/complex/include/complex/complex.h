@@ -33,6 +33,11 @@
             return sqrt((double)Re * (double)Re + (double)Im * (double)Im);
         }
 
+        // переопределение оператора "=="
+        bool operator==(const Complex<T>& other) const {
+               return Re == other.Re && Im == other.Im;
+        }
+
         ~Complex() = default; // деструктор
 /*
     private:
@@ -95,6 +100,8 @@
                 res.Im = ((c1.Im * c2.Re) - (c1.Re * c2.Im)) / (c2.Re * c2.Re + c2.Im * c2.Im);
                 return res;
     }
+
+
 
     /*
     template <typename T>
