@@ -31,11 +31,16 @@ add_subdirectory(TestTask/libs/animal)
 
 add_subdirectory(TestTask/libs/cat)
 
-add_subdirectory(TestTask/libs/math)
-
 add_subdirectory(TestTask/libs/complex)
 
 add_subdirectory(TestTask/libs/filesignal)
+
+add_subdirectory(TestTask/libs/demodulator)
+
+add_subdirectory(TestTask/libs/demodulatorAM)
+
+add_subdirectory(TestTask/libs/demodulatorFM)
+
 
 if(UNITTEST)
         message(" output lib dir " ${CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG})
@@ -50,6 +55,12 @@ target_link_libraries(${PROJECT_NAME} Printer)
 target_link_libraries(${PROJECT_NAME} Complex) # нужно ли?
 
 target_link_libraries(${PROJECT_NAME} FileSignal) # нужно ли?
+
+target_link_libraries(${PROJECT_NAME} Demodulator) # нужно ли?
+
+target_link_libraries(${PROJECT_NAME} DemodulatorAM) # нужно ли?
+
+target_link_libraries(${PROJECT_NAME} DemodulatorFM) # нужно ли?
 
 
 if(UNIX)

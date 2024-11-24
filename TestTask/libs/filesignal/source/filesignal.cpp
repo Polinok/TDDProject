@@ -9,7 +9,6 @@ void Helpers::signalWriter(const std::vector<int16_t>& signal, WavHead& head, co
         }
     head.size2 = signal.size() * sizeof(int16_t); // 3276800
     head.size0 = 36 + head.size2;
-    auto size=sizeof(head);
     outfile.write((char*) &head, sizeof(head)); // 44
     outfile.write((char*) (signal.data()), head.size2);
     outfile.close();

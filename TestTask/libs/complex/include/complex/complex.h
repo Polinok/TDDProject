@@ -28,7 +28,7 @@
         };
 
         // double abs(); // модуль комплексного числа
-        double abs()
+        double abs() const
         {
             return sqrt((double)Re * (double)Re + (double)Im * (double)Im);
         }
