@@ -5,8 +5,9 @@ TEST(FileSignalTests, IOtest) {
     std::vector<Complex<int16_t>> signalc(10);
     std::vector<int16_t> signal(20);
     int k = 0;
-    for (int i = 0;  i < 10; i++) {
+    for (size_t i = 0;  i < 10; i++) {
         signalc[i] = static_cast<int16_t>(i);
+        //signalc[i] = Complex<int16_t>(i);
         std::cout << signalc[i] << std::endl;
 
         signal[k] = static_cast<int16_t>(signalc[i].Re);
@@ -25,6 +26,10 @@ TEST(FileSignalTests, IOtest) {
     Helpers::signalWriter(signal, head, filename);
 
     std::vector<Complex<int16_t>> signalnew = Helpers::complexSignalReader<int16_t>(filename);
+
+    for (size_t i = 0;  i < signalnew.size(); i++) {
+        std::cout << signalnew[i] << std::endl;
+    }
 
     ASSERT_EQ(signalnew, signalc);
 

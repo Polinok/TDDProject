@@ -13,8 +13,19 @@ TEST(DemodulatorFMTests, answertest) {
     Demodulator<int>* DMFM = new DemodulatorFM<int>();
     DMFM->demod(signalinput.data(), 5);
 
-    auto signaloutput = DMFM->getDemodData(); // получение демодулированного сигнала
+    auto signaloutput1 = DMFM->getDemodData(); // получение демодулированного сигнала
+    for (int i = 0;  i < 5; i++) {
+        std::cout << signaloutput1.data[i] << std::endl;
+    }
 
-    ASSERT_EQ(signaloutput.data, signalanswer);
+    ASSERT_EQ(signaloutput1.data, signalanswer);
+
+    std::vector<double> signaloutput2 = std::move(DMFM->extractData());
+    for (int i = 0;  i < 5; i++) {
+        std::cout << signaloutput2[i] << std::endl;
+    }
+
+    ASSERT_EQ(signaloutput2, signalanswer);
+
 }
 

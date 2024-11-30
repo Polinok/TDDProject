@@ -34,14 +34,15 @@ int main()
     Demodulator<int>* DMAM = new DemodulatorAM<int>();
     DMAM->demod(signalAM.data(), sizeAM);
 
-    auto demodAM = DMAM->getDemodData(); // получение демодулированного сигнала
+    std::vector<double> demodAM = std::move(DMAM->extractData());
+    //auto demodAM = DMAM->getDemodData(); // получение демодулированного сигнала
 
-    double maxVal = *max_element(demodAM.data.begin(), demodAM.data.end()); // поиск максимума среди отсчетов демодулированного сигнала
+    double maxVal = *max_element(demodAM.begin(), demodAM.end()); // поиск максимума среди отсчетов демодулированного сигнала
 
     // Нормализуем данные и конвертируем в int16_t
     std::vector<int16_t> demodAM_int16(sizeAM);
     for (int i = 0; i < sizeAM; i++) {
-        demodAM_int16[i] = static_cast<int16_t>((demodAM.data[i] / maxVal) * 32767);
+        demodAM_int16[i] = static_cast<int16_t>((demodAM[i] / maxVal) * 32767);
     }
 
     // Запись демодулированного сигнала в файл
@@ -63,14 +64,15 @@ int main()
     Demodulator<int>* DMFM = new DemodulatorFM<int>();
     DMFM->demod(signalFM.data(), sizeFM);
 
-    auto demodFM = DMFM->getDemodData(); // получение демодулированного сигнала
+    std::vector<double> demodFM = std::move(DMFM->extractData());
+    //auto demodFM = DMFM->getDemodData(); // получение демодулированного сигнала
 
-    double maxValFM = *max_element(demodFM.data.begin(), demodFM.data.end()); // поиск максимума среди отсчетов демодулированного сигнала
+    double maxValFM = *max_element(demodFM.begin(), demodFM.end()); // поиск максимума среди отсчетов демодулированного сигнала
 
     // Нормализуем данные и конвертируем в int16_t
     std::vector<int16_t> demodFM_int16(sizeFM);
     for (int i = 0; i < sizeFM; i++) {
-        demodFM_int16[i] = static_cast<int16_t>((demodFM.data[i] / maxValFM) * 32767);
+        demodFM_int16[i] = static_cast<int16_t>((demodFM[i] / maxValFM) * 32767);
     }
 
     // Запись демодулированного сигнала в файл
